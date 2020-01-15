@@ -42,4 +42,8 @@
 + 然后使用:(Inject3.dpr/InjectDllRemote.dpr)注入即可
 
 
+![getlocalTime.jpg](https://i.loli.net/2019/05/16/5cdd1f272131824039.jpg)	
+![origin.jpg](https://i.loli.net/2019/05/16/5cdd1f2722e5914814.jpg)	
+![Meesage.jpg](https://i.loli.net/2019/05/16/5cdd1f2731d2d23520.jpg)
+
 
