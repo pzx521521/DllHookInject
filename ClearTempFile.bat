@@ -1,1 +1,1 @@
-del *.~*;*.dcu;*.bak;*.scc;*.ddp;*.#*;*.rsm;*.res;*.dproj;*.exe;*.dll;*..skincfg;*..identcache;*.local;*.identcache;*.skincfg;*.2007 /s
+del *.stat;*.drc;*.identcache;*.skincfg;*.res;*.local;*.map;*.~*;*.dcu;*.bak;*.scc;*.ddp;*.#*;*.rsm /s

@@ -1,72 +1,72 @@
-﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-		<PropertyGroup>
-			<ProjectGuid>{A1C71CA7-A8D6-4D8A-8A53-85F7B42668C5}</ProjectGuid>
-		</PropertyGroup>
-		<ItemGroup>
-			<Projects Include="hookMsgDll.dpr">
-				<Dependencies/>
-			</Projects>
-			<Projects Include="Inject3.dpr">
-				<Dependencies/>
-			</Projects>
-			<Projects Include="RemoteInjectDll.dpr">
-				<Dependencies/>
-			</Projects>
-			<Projects Include="TestExe.dpr">
-				<Dependencies/>
-			</Projects>
-		</ItemGroup>
-		<ProjectExtensions>
-			<Borland.Personality>Default.Personality.12</Borland.Personality>
-			<Borland.ProjectType/>
-			<Borlandprect>
-				<Default.Personality/>
-			</Borlandprect>
-		</ProjectExtensions>
-		<Target Name="hookMsgDll">
-			<MSBuild Projects="hookMsgDll.dpr"/>
-		</Target>
-		<Target Name="hookMsgDll:Clean">
-			<MSBuild Targets="Clean" Projects="hookMsgDll.dpr"/>
-		</Target>
-		<Target Name="hookMsgDll:Make">
-			<MSBuild Targets="Make" Projects="hookMsgDll.dpr"/>
-		</Target>
-		<Target Name="Inject3">
-			<MSBuild Projects="Inject3.dpr"/>
-		</Target>
-		<Target Name="Inject3:Clean">
-			<MSBuild Targets="Clean" Projects="Inject3.dpr"/>
-		</Target>
-		<Target Name="Inject3:Make">
-			<MSBuild Targets="Make" Projects="Inject3.dpr"/>
-		</Target>
-		<Target Name="RemoteInjectDll">
-			<MSBuild Projects="RemoteInjectDll.dpr"/>
-		</Target>
-		<Target Name="RemoteInjectDll:Clean">
-			<MSBuild Targets="Clean" Projects="RemoteInjectDll.dpr"/>
-		</Target>
-		<Target Name="RemoteInjectDll:Make">
-			<MSBuild Targets="Make" Projects="RemoteInjectDll.dpr"/>
-		</Target>
-		<Target Name="TestExe">
-			<MSBuild Projects="TestExe.dpr"/>
-		</Target>
-		<Target Name="TestExe:Clean">
-			<MSBuild Targets="Clean" Projects="TestExe.dpr"/>
-		</Target>
-		<Target Name="TestExe:Make">
-			<MSBuild Targets="Make" Projects="TestExe.dpr"/>
-		</Target>
-		<Target Name="Build">
-			<CallTarget Targets="hookMsgDll;Inject3;RemoteInjectDll;TestExe"/>
-		</Target>
-		<Target Name="Clean">
-			<CallTarget Targets="hookMsgDll:Clean;Inject3:Clean;RemoteInjectDll:Clean;TestExe:Clean"/>
-		</Target>
-		<Target Name="Make">
-			<CallTarget Targets="hookMsgDll:Make;Inject3:Make;RemoteInjectDll:Make;TestExe:Make"/>
-		</Target>
-		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
-	</Project>
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{A1C71CA7-A8D6-4D8A-8A53-85F7B42668C5}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="hookMsgDll.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="RemoteInjectDll.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="TestExe.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Inject3.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="hookMsgDll">
+        <MSBuild Projects="hookMsgDll.dproj"/>
+    </Target>
+    <Target Name="hookMsgDll:Clean">
+        <MSBuild Projects="hookMsgDll.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="hookMsgDll:Make">
+        <MSBuild Projects="hookMsgDll.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="RemoteInjectDll">
+        <MSBuild Projects="RemoteInjectDll.dproj"/>
+    </Target>
+    <Target Name="RemoteInjectDll:Clean">
+        <MSBuild Projects="RemoteInjectDll.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="RemoteInjectDll:Make">
+        <MSBuild Projects="RemoteInjectDll.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TestExe">
+        <MSBuild Projects="TestExe.dproj"/>
+    </Target>
+    <Target Name="TestExe:Clean">
+        <MSBuild Projects="TestExe.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TestExe:Make">
+        <MSBuild Projects="TestExe.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Inject3">
+        <MSBuild Projects="Inject3.dproj"/>
+    </Target>
+    <Target Name="Inject3:Clean">
+        <MSBuild Projects="Inject3.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Inject3:Make">
+        <MSBuild Projects="Inject3.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="hookMsgDll;RemoteInjectDll;TestExe;Inject3"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="hookMsgDll:Clean;RemoteInjectDll:Clean;TestExe:Clean;Inject3:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="hookMsgDll:Make;RemoteInjectDll:Make;TestExe:Make;Inject3:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

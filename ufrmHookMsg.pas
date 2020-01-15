@@ -34,14 +34,14 @@ var
   SsHandle: Thandle;
   FoundAProc, FoundOK: boolean;
 begin
-  ProcessID :=0;
+  ProcessID := 0;
   { 创建系统快照 }
   SsHandle := CreateToolHelp32SnapShot(TH32CS_SnapProcess, 0);
 
   { 取得快照中的第一个进程 }
   { 一定要设置结构的大小,否则将返回False }
   lppe.dwSize := sizeof(TProcessEntry32);
-  FoundAProc := Process32First(Sshandle, lppe);
+  FoundAProc := Process32First(SsHandle, lppe);
   while FoundAProc do
   begin
     { 进行匹配 }
@@ -61,21 +61,21 @@ begin
 end;
 
 { 设置权限 }
-function EnabledDebugPrivilege(const Enabled : Boolean) : Boolean;
+function EnabledDebugPrivilege(const Enabled: Boolean): Boolean;
 var
-  hTk : THandle; { 打开令牌句柄 }
-  rtnTemp : Dword; { 调整权限时返回的值 }
-  TokenPri : TOKEN_PRIVILEGES;
+  hTk: THandle; { 打开令牌句柄 }
+  rtnTemp: Dword; { 调整权限时返回的值 }
+  TokenPri: TOKEN_PRIVILEGES;
 const
   SE_DEBUG = 'SeDebugPrivilege'; { 查询值 }
 begin
   Result := False;
   { 获取进程令牌句柄,设置权限 }
-  if (OpenProcessToken(GetCurrentProcess(),TOKEN_ADJUST_PRIVILEGES,hTk)) then
+  if (OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES, hTk)) then
   begin
     TokenPri.PrivilegeCount := 1;
     { 获取Luid值 }
-    LookupPrivilegeValue(nil,SE_DEBUG,TokenPri.Privileges[0].Luid);
+    LookupPrivilegeValue(nil, SE_DEBUG, TokenPri.Privileges[0].Luid);
 
     if Enabled then
       TokenPri.Privileges[0].Attributes := SE_PRIVILEGE_ENABLED
@@ -84,7 +84,7 @@ begin
 
     rtnTemp := 0;
     { 设置新的权限 }
-    AdjustTokenPrivileges(hTk,False,TokenPri,sizeof(TokenPri),nil,rtnTemp);
+    AdjustTokenPrivileges(hTk, False, TokenPri, sizeof(TokenPri), nil, rtnTemp);
 
     Result := GetLastError = ERROR_SUCCESS;
     CloseHandle(hTk);
@@ -93,16 +93,16 @@ begin
 end;
 
 { 调试函数 }
-procedure OutPutText(var CH:PChar);
+procedure OutPutText(var CH: PChar);
 var
   FileHandle: TextFile;
-Begin
-  AssignFile(FileHandle,'zztest.txt');
+begin
+  AssignFile(FileHandle, 'zztest.txt');
   Append(FileHandle);
-  Writeln(FileHandle,CH);
+  Writeln(FileHandle, CH);
   Flush(FileHandle);
   CloseFile(FileHandle);
-END;
+end;
 
 { 注入远程进程 }
 function InjectTo(const Host, Guest: string; const PID: DWORD = 0): DWORD;
@@ -115,7 +115,8 @@ var
   { 写入到远程进程后的地址 }
   pszLibFileRemote: Pointer;
   iReturnCode: Boolean;
-  TempVar: DWORD;
+  lpNumberOfBytesWritten: THandle;
+  lpThreadId: DWORD;
   { 指向函数LoadLibraryW的地址 }
   pfnStartAddr: TFNThreadStartRoutine;
   { dll全路径,需要写到远程进程的内存中去 }
@@ -131,27 +132,27 @@ begin
 
   { 获取进程ID }
   if PID > 0 then
-     dwRemoteProcessID := PID
+    dwRemoteProcessId := PID
   else
-     GetMyProcessID(Host, False, dwRemoteProcessID);
+    GetMyProcessID(Host, False, dwRemoteProcessId);
 
   { 取得远程进程句柄,具有写入权限}
   hRemoteProcess := OpenProcess(PROCESS_CREATE_THREAD + {允许远程创建线程}
-      PROCESS_VM_OPERATION + {允许远程VM操作}
-      PROCESS_VM_WRITE, {允许远程VM写}
-      FALSE, dwRemoteProcessId);
+    PROCESS_VM_OPERATION + {允许远程VM操作}
+    PROCESS_VM_WRITE, {允许远程VM写}
+    FALSE, dwRemoteProcessId);
 
   { 用函数VirtualAllocex在远程进程分配空间,并用WriteProcessMemory中写入dll路径 }
   memSize := (1 + lstrlenW(pszLibAFilename)) * sizeof(WCHAR);
   pszLibFileRemote := PWIDESTRING(VirtualAllocEx(hRemoteProcess, nil, memSize, MEM_COMMIT, PAGE_READWRITE));
-  TempVar := 0;
-  iReturnCode := WriteProcessMemory(hRemoteProcess, pszLibFileRemote, pszLibAFilename, memSize, TempVar);
+  lpNumberOfBytesWritten := 0;
+  iReturnCode := WriteProcessMemory(hRemoteProcess, pszLibFileRemote, pszLibAFilename, memSize, lpNumberOfBytesWritten);
   if iReturnCode then
   begin
     pfnStartAddr := GetProcAddress(GetModuleHandle('Kernel32'), 'LoadLibraryW');
-    TempVar := 0;
+    lpThreadId := 0;
     { 在远程进程中启动dll }
-    Result := CreateRemoteThread(hRemoteProcess, nil, 0, pfnStartAddr, pszLibFileRemote, 0, TempVar);
+    Result := CreateRemoteThread(hRemoteProcess, nil, 0, pfnStartAddr, pszLibFileRemote, 0, lpThreadId);
   end;
   { 释放内存空间 }
   Freemem(pszLibAFilename);
@@ -162,12 +163,13 @@ procedure TfrmHookMsg.InjectClick(Sender: TObject);
 var
   DllPath: string;
 begin
-  DllPath :=  EditDll.Text;
+  DllPath := EditDll.Text;
   if (not FileExists(DllPath)) or (ExtractFilePath(DllPath) = '') then
-     DllPath := ExtractFilePath(ParamStr(0))  + EditDll.Text;
-  if FileExists(DllPath)  then
+    DllPath := ExtractFilePath(ParamStr(0)) + EditDll.Text;
+  if FileExists(DllPath) then
     ShowMessage(IntToStr(InjectTo(EditName.Text, DllPath)))
 
 end;
 
 end.
+

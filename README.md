@@ -1,6 +1,6 @@
-[English](./README-English.md)
 # Dll 注入示例
 
+#### 兼容xe10
 ### 说明 
 
 + 1. 网上的较乱, 这里只是整理了一下
@@ -40,11 +40,6 @@
 
 + 可以把dll和TestExe 放在一起为一个group, 同时打开, 然后在dll中Run->load process->process中输入TestExe的路径
 + 然后使用:(Inject3.dpr/InjectDllRemote.dpr)注入即可
-
-
-![getlocalTime.jpg](https://i.loli.net/2019/05/16/5cdd1f272131824039.jpg)
-![origin.jpg](https://i.loli.net/2019/05/16/5cdd1f2722e5914814.jpg)
-![Meesage.jpg](https://i.loli.net/2019/05/16/5cdd1f2731d2d23520.jpg)
 
 
 

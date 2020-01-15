@@ -112,9 +112,9 @@ end;
 
 
 //传递消息
-function HookProc(nCode, wParam, lParam: Integer): Integer; stdcall;
+function HookProc(code: Integer; wparam: WPARAM; lparam: LPARAM): LRESULT stdcall;
 begin
-  Result := CallNextHookEx(hhk, nCode, wParam, lParam);
+  Result := CallNextHookEx(hhk, code, wParam, lParam);
 end;
 
 //开始HOOK
@@ -135,7 +135,7 @@ var
   hThread: THandle;
   szRemote: PWideChar;
   uSize: Cardinal;
-  uWrite: Cardinal;
+  uWrite: THandle;
   pStartAddr: Pointer;
 begin
   Result := False;
